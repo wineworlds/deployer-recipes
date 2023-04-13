@@ -92,10 +92,6 @@ task('fetch:db:export', function () {
     download("{{current_path}}/dump.sql", "{{local_path}}/dump.sql");
 
     run("rm {{current_path}}/dump.sql");
-
-    runLocally("cd {{local_path}} && cat ./dump.sql | bin/typo3cms database:import");
-
-    runLocally("rm {{local_path}}/dump.sql");
 });
 
 task('fetch:db:import', function () {
