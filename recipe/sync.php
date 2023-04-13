@@ -24,13 +24,14 @@ task('sync:db:export', function () {
     $syncFromHost = host(get('sync_from_host'));
 
     on($syncFromHost, function () {
+        // TODO: Struktur von fetch:db:export übernehmen
         $file = 'dump.sql';
         $options = implode(" ", [
             '--skip-comments',
         ]);
-        $databaseRrl = trim(run('echo "$DATABASE_URL"'));
+        $databaseURL = trim(run('echo "$DATABASE_URL"'));
 
-        preg_match('/^mysql:\/\/([^:]+):([^@]+)@([^:]+):([^\/]+)\/(.*)$/i', $databaseRrl, $matches);
+        preg_match('/^mysql:\/\/([^:]+):([^@]+)@([^:]+):([^\/]+)\/(.*)$/i', $databaseURL, $matches);
 
         $user = $matches[1];
         $pass = $matches[2];
@@ -56,10 +57,11 @@ task('sync:db:import', function () {
     $syncToHost = host(get('sync_to_host'));
 
     on($syncToHost, function () {
+        // TODO: Struktur von fetch:db:import übernehmen
         $file = 'dump.sql';
-        $databaseRrl = trim(run('echo "$DATABASE_URL"'));
+        $databaseURL = trim(run('echo "$DATABASE_URL"'));
 
-        preg_match('/^mysql:\/\/([^:]+):([^@]+)@([^:]+):([^\/]+)\/(.*)$/i', $databaseRrl, $matches);
+        preg_match('/^mysql:\/\/([^:]+):([^@]+)@([^:]+):([^\/]+)\/(.*)$/i', $databaseURL, $matches);
 
         $user = $matches[1];
         $pass = $matches[2];

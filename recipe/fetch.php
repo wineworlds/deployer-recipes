@@ -7,13 +7,13 @@ use Deployer\Exception\ConfigurationException;
 set('database_url_pattern', '/^mysql:\/\/([^:]+):([^@]+)@([^:]+):([^\/]+)\/(.*)$/i');
 
 set('database_url', function () {
-    $databaseRrl = trim(run('echo "$DATABASE_URL"'));
+    $databaseURL = trim(run('echo "$DATABASE_URL"'));
 
-    if (!preg_match(get('database_url_pattern'), $databaseRrl)) {
+    if (!preg_match(get('database_url_pattern'), $databaseURL)) {
         throw new ConfigurationException('Mssing valid $DATABASE_URL inside .env');
     }
 
-    return $databaseRrl;
+    return $databaseURL;
 });
 
 set('mysqldump_file', 'dump.sql');
@@ -32,31 +32,62 @@ set('fetch_files', []);
 
 task('fetch', ['fetch:db', 'fetch:files']);
 
-task('fetch:db', function () {
-    preg_match(get('database_url_pattern'), get('database_url'), $matches);
+task('fetch:db', ['fetch:db:export', 'fetch:db:import']);
+
+task('fetch:db:export', function () {
+    $file = get('mysqldump_file');
+    $options = implode(" ", get('mysqldump_options'));
+    $databaseURLPatern = get('database_url_pattern');
+
+    // TODO: wird die Methode hinter diesem aufruf jedes mal neu aufgerufen oder passiert das nur einmalig, das wäre wichtig zu klären da es sonst zu problemen kommen könnte innerhalb von dem on() block.
+    $databaseURL = get('database_url');
+    // $databaseURL = trim(run('echo "$DATABASE_URL"'));
+
+    preg_match($databaseURLPatern, $databaseURL, $matches);
 
     $user = $matches[1];
     $pass = $matches[2];
     $host = $matches[3];
     $port = $matches[4];
     $name = $matches[5];
-    $file = get('mysqldump_file');
-    $options = implode(" ", get('mysqldump_options'));
 
     // Export DB
+    writeln("<info>Export DB...</info>");
     run("mysqldump -h {$host} -P {$port} -u {$user} -p{$pass} {$options} {$name} > {{deploy_path}}/{$file}");
 
     // Download DB
+    writeln("<info>Download DB...</info>");
     download("{{deploy_path}}/{$file}", "{{local_path}}/{$file}");
 
     // Remove DB file from server
+    writeln("<info>Remove DB file from server...</info>");
     run("rm {{deploy_path}}/{$file}");
+});
 
-    // Import DB in DDEV
-    // TODO: red local .env file to detect db
-    runLocally("mysql -h db -P 3306 -u root -proot < {{local_path}}/{$file}");
+task('fetch:db:import', function () {
+    $file = get('mysqldump_file');
+    $options = implode(" ", get('mysqldump_options'));
+    $databaseURLPatern = get('database_url_pattern');
 
-    runLocally("rm {{local_path}}/{$file}");
+    // TODO: wird die Methode hinter diesem aufruf jedes mal neu aufgerufen oder passiert das nur einmalig, das wäre wichtig zu klären da es sonst zu problemen kommen könnte innerhalb von dem on() block.
+    $databaseURL = get('database_url');
+    // $databaseURL = trim(run('echo "$DATABASE_URL"'));
+
+    preg_match($databaseURLPatern, $databaseURL, $matches);
+
+    $user = $matches[1];
+    $pass = $matches[2];
+    $host = $matches[3];
+    $port = $matches[4];
+    $name = $matches[5];
+
+    // Import DB
+    writeln("<info>Import DB...</info>");
+    runLocally("mysql -h {$host} -P {$port} -u {$user} -p{$pass} -D {$name} < {{deploy_path}}/{$file}");
+
+    // Remove DB file from local
+    writeln("<info>Remove DB file from local...</info>");
+    runLocally("rm {{deploy_path}}/{$file}");
 });
 
 task('fetch:files', function () {
