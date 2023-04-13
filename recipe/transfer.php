@@ -12,7 +12,7 @@ set('sync_to_host', function () {
     throw new ConfigurationException('Please, specify `sync_to_host`.');
 });
 
-task('transfer', ['sync:db:export', 'sync:db:import', 'transfer:files']);
+task('transfer', ['sync:db', 'transfer:files']);
 
 task('transfer:files', function () {
     $syncFromHost = host(get('sync_from_host'));

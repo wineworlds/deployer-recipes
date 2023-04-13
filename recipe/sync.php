@@ -16,7 +16,9 @@ set('sync_dirs', function () {
     throw new ConfigurationException('Please, specify `sync_dirs`.');
 });
 
-task('sync', ['sync:db:export', 'sync:db:import', 'sync:files']);
+task('sync', ['sync:db', 'sync:files']);
+
+task('sync:db', ['sync:db:export', 'sync:db:import']);
 
 task('sync:db:export', function () {
     $syncFromHost = host(get('sync_from_host'));
