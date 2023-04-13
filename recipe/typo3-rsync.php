@@ -2,6 +2,7 @@
 
 namespace Deployer;
 
+require 'recipe/typo3.php';
 require 'contrib/rsync.php';
 require __DIR__ . '/fetch.php';
 require __DIR__ . '/clean.php';
