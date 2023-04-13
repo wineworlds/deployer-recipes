@@ -86,14 +86,19 @@ task('t3:prepare', static function () {
     run('cd {{release_path}} && bin/typo3cms cache:warmup');
 });
 
-desc('Fetches the database from the remote server');
-task('fetch:db', function () {
-    run("cd {{current_path}} && PHPVERSION=8.1 bin/typo3cms database:export -e '*cache*' -e 'sys_log' -e 'fe_sessions' -e 'be_sessions' > ./dump.sql");
+task('fetch:db:export', function () {
+    run("cd {{current_path}} && bin/typo3cms database:export -e '*cache*' -e 'sys_log' -e 'fe_sessions' -e 'be_sessions' > ./dump.sql");
 
     download("{{current_path}}/dump.sql", "{{local_path}}/dump.sql");
 
     run("rm {{current_path}}/dump.sql");
 
+    runLocally("cd {{local_path}} && cat ./dump.sql | bin/typo3cms database:import");
+
+    runLocally("rm {{local_path}}/dump.sql");
+});
+
+task('fetch:db:import', function () {
     runLocally("cd {{local_path}} && cat ./dump.sql | bin/typo3cms database:import");
 
     runLocally("rm {{local_path}}/dump.sql");
