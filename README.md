@@ -13,3 +13,47 @@ For the most tasks a `.env` file with a `DATABASE_URL` is required.
 - fetch
 - sync
 - transfer
+
+## Example
+
+```yaml
+import:
+  - recipe/typo3-rsync.php
+
+config:
+  sync_from_host: live
+  sync_to_host: preview
+
+hosts:
+  preview:
+    hostname: example.de
+    remote_user: username
+    deploy_path: /var/www/username/preview
+
+  live:
+    hostname: example.de
+    remote_user: username
+    deploy_path: /var/www/username/live
+
+tasks:
+  build:
+    - run: uptime
+
+after:
+  deploy:failed: deploy:unlock
+```
+
+## Commands
+
+```bash
+vendor/bin/dep sync preview
+vendor/bin/dep sync:db preview
+vendor/bin/dep sync:files preview
+
+vendor/bin/dep fetch preview
+vendor/bin/dep fetch:db preview
+vendor/bin/dep fetch:files preview
+
+vendor/bin/dep transfer preview
+vendor/bin/dep transfer:files preview
+```
