@@ -5,7 +5,6 @@ namespace Deployer;
 require 'recipe/typo3.php';
 require 'contrib/rsync.php';
 require __DIR__ . '/fetch.php';
-require __DIR__ . '/clean.php';
 require __DIR__ . '/sync.php';
 
 set('typo3_webroot', 'public');
