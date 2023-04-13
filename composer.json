@@ -1,0 +1,17 @@
+{
+	"name": "wineworlds/deployer-recipes",
+	"description": "A collection of recipes for deployer",
+	"type": "deployer-recipes",
+	"require": {
+		"deployer/deployer": "^v7.0"
+	},
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Kubilay Melnikov",
+			"email": "melnikov@wineworlds.de",
+			"homepage": "https://www.wineworlds.de",
+			"role": "Developer"
+		}
+	]
+}
