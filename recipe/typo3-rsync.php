@@ -86,7 +86,12 @@ task('t3:prepare', static function () {
     run('cd {{release_path}} && bin/typo3cms cache:warmup');
 });
 
+// ToDo: sync:db:export & sync:db:import fehlen noch, diese müssen auch noch an TYPO3 angepasst werden.
+
 task('fetch:db:export', function () {
+    // TODO: der bin Pfad sollte konfigurierbar sein
+    // TODO: gibt es eine bessere lösung anstatt cd im run aufzurufen?
+
     run("cd {{current_path}} && bin/typo3cms database:export -e '*cache*' -e 'sys_log' -e 'fe_sessions' -e 'be_sessions' > ./dump.sql");
 
     download("{{current_path}}/dump.sql", "{{local_path}}/dump.sql");
