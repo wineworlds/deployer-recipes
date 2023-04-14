@@ -18,21 +18,21 @@ For the most tasks a `.env` file with a `DATABASE_URL` is required.
 
 ```yaml
 import:
-  - recipe/typo3-rsync.php
+  - vendor/wineworlds/deployer-recipes/recipe/typo3-rsync.php
 
 config:
   sync_from_host: live
   sync_to_host: preview
+  remote_user: username
+  http_user: username
 
 hosts:
   preview:
     hostname: example.de
-    remote_user: username
     deploy_path: /var/www/username/preview
 
   live:
     hostname: example.de
-    remote_user: username
     deploy_path: /var/www/username/live
 
 tasks:
