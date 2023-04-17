@@ -10,35 +10,49 @@ require __DIR__ . '/transfer.php';
 
 set('rsync_src', './');
 
-set('rsync', [
-    'exclude' => [
-        '/.ddev',
-        '/.deployer',
-        '/.git',
-        '/.github',
-        '/.gitignore',
-        '/.thunder-client',
-        '/deploy.yaml',
-        '/config/jwt',
-        '/files',
-        '/var/log',
-        '/var/cache',
-        '/public/media',
-        '/public/thumbnail',
-        '/public/sitemap'
-    ],
-    'exclude-file' => false,
-    'include' => [],
-    'include-file' => false,
-    'filter' => [
-        'protect .env .uniqueid.txt auth.json'
-    ],
-    'filter-file' => false,
-    'filter-perdir' => false,
-    'flags' => 'rlDz',
-    'options' => ['recursive', 'delete'],
-    'timeout' => 3600,
-]);
+set('rsync_chmod', 'u+rw,g+r,o+r');
+set('rsync_use_chmod', false);
+
+set('rsync', function () {
+    $rsyncUseChmod = get('rsync_use_chmod');
+
+    $rsync = [
+        'exclude' => [
+            '/.ddev',
+            '/.deployer',
+            '/.git',
+            '/.github',
+            '/.gitignore',
+            '/.thunder-client',
+            '/deploy.yaml',
+            '/config/jwt',
+            '/files',
+            '/var/log',
+            '/var/cache',
+            '/public/media',
+            '/public/thumbnail',
+            '/public/sitemap'
+        ],
+        'exclude-file' => false,
+        'include' => [],
+        'include-file' => false,
+        'filter' => [
+            'protect .env .uniqueid.txt auth.json'
+        ],
+        'filter-file' => false,
+        'filter-perdir' => false,
+        'flags' => 'rlDz',
+        'options' => ['recursive', 'delete'],
+        'timeout' => 3600,
+    ];
+
+    if ($rsyncUseChmod) {
+        $rsyncChmod = get('rsync_chmod');
+        $rsync['exclude']['options'][] = "chmod=$rsyncChmod";
+    }
+
+    return $rsync;
+});
 
 set('shared_files', [
     ".env",

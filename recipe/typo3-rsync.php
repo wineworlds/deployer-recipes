@@ -9,29 +9,43 @@ require __DIR__ . '/sync.php';
 
 set('typo3_webroot', 'public');
 
-set('rsync', [
-    'exclude' => [
-        '/.*',
-        '/composer.*',
-        '/deploy.yaml',
-        '/{{typo3_webroot}}/fileadmin',
-        '/{{typo3_webroot}}/typo3temp',
-        '/{{typo3_webroot}}/uploads',
-        '/{{typo3_webroot}}/typo3conf/AdditionalConfiguration.php',
-        '/var',
-    ],
-    'exclude-file' => false,
-    'include' => [],
-    'include-file' => false,
-    'filter' => [
-        'protect .env'
-    ],
-    'filter-file' => false,
-    'filter-perdir' => false,
-    'flags' => 'rlDvz',
-    'options' => ['recursive', 'delete'],
-    'timeout' => 3600,
-]);
+set('rsync_chmod', 'u+rw,g+r,o+r');
+set('rsync_use_chmod', false);
+
+set('rsync', function () {
+    $rsyncUseChmod = get('rsync_use_chmod');
+
+    $rsync = [
+        'exclude' => [
+            '/.*',
+            '/composer.*',
+            '/deploy.yaml',
+            '/{{typo3_webroot}}/fileadmin',
+            '/{{typo3_webroot}}/typo3temp',
+            '/{{typo3_webroot}}/uploads',
+            '/{{typo3_webroot}}/typo3conf/AdditionalConfiguration.php',
+            '/var',
+        ],
+        'exclude-file' => false,
+        'include' => [],
+        'include-file' => false,
+        'filter' => [
+            'protect .env'
+        ],
+        'filter-file' => false,
+        'filter-perdir' => false,
+        'flags' => 'rlDvz',
+        'options' => ['recursive', 'delete'],
+        'timeout' => 3600,
+    ];
+
+    if ($rsyncUseChmod) {
+        $rsyncChmod = get('rsync_chmod');
+        $rsync['exclude']['options'][] = "chmod=$rsyncChmod";
+    }
+
+    return $rsync;
+});
 
 set('default_timeout', 3600);
 set('rsync_src', './');
