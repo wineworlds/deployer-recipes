@@ -10,6 +10,7 @@ require __DIR__ . '/transfer.php';
 
 set('rsync_src', './');
 
+// TODO: die options sollten grundsätzlich dynamisch sein und nicht hart codiert.
 set('rsync_chmod', 'u+rw,g+r,o+r');
 set('rsync_use_chmod', false);
 
