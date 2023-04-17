@@ -6,6 +6,12 @@ This is a collection of recipes for [deployer](https://deployer.org/).
 
 For the most tasks a `.env` file with a `DATABASE_URL` is required.
 
+## Install
+```
+composer require --dev deployer/deployer
+composer require --dev wineworlds/deployer-recipes
+```
+
 ## Recipes
 
 - typo3-rsync [fetch, sync, transfer]
