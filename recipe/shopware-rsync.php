@@ -49,7 +49,7 @@ set('rsync', function () {
 
     if ($rsyncUseChmod) {
         $rsyncChmod = get('rsync_chmod');
-        $rsync['exclude']['options'][] = "chmod=$rsyncChmod";
+        $rsync['options'][] = "chmod=$rsyncChmod";
     }
 
     return $rsync;
