@@ -121,11 +121,6 @@ task('sw:deploy', [
     'sw:plugin:refresh',
     'sw:cache:clear',
     'sw:plugin:update:all',
-    'sw:pwa:dump-plugins',
     'sw:cache:clear',
     'sw:database:migrate',
 ]);
-
-task('sw:pwa:dump-plugins', function () {
-    run('cd {{release_path}} && bin/console pwa:dump-plugins');
-});
