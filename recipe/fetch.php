@@ -16,6 +16,16 @@ set('database_url', function () {
     return $databaseURL;
 });
 
+set('local_database_url', function () {
+    $databaseURL = trim(runLocally('. {{dotenv_local}}; echo "$DATABASE_URL"'));
+
+    if (!preg_match(get('database_url_pattern'), $databaseURL)) {
+        throw new ConfigurationException('Mssing valid $DATABASE_URL inside .env');
+    }
+
+    return $databaseURL;
+});
+
 set('mysqldump_file', 'dump.sql');
 
 set('mysqldump_options', [
@@ -70,8 +80,8 @@ task('fetch:db:import', function () {
     $databaseURLPatern = get('database_url_pattern');
 
     // TODO: wird die Methode hinter diesem aufruf jedes mal neu aufgerufen oder passiert das nur einmalig, das wäre wichtig zu klären da es sonst zu problemen kommen könnte innerhalb von dem on() block.
-    $databaseURL = get('database_url');
-    // $databaseURL = trim(run('echo "$DATABASE_URL"'));
+    $databaseURL = get('local_database_url');
+    // $databaseURL = trim(runLocally('echo "$DATABASE_URL"'));
 
     preg_match($databaseURLPatern, $databaseURL, $matches);
 
@@ -83,11 +93,11 @@ task('fetch:db:import', function () {
 
     // Import DB
     writeln("<info>Import DB...</info>");
-    runLocally("mysql -h {$host} -P {$port} -u {$user} -p{$pass} -D {$name} < {{deploy_path}}/{$file}");
+    runLocally("mysql -h {$host} -P {$port} -u {$user} -p{$pass} -D {$name} < {{local_path}}/{$file}");
 
     // Remove DB file from local
     writeln("<info>Remove DB file from local...</info>");
-    runLocally("rm {{deploy_path}}/{$file}");
+    runLocally("rm {{local_path}}/{$file}");
 });
 
 task('fetch:files', function () {

@@ -13,6 +13,8 @@ set('rsync_src', './');
 // TODO: die options sollten grundsätzlich dynamisch sein und nicht hart codiert.
 set('rsync_chmod', 'u+rw,g+r,o+r');
 set('rsync_use_chmod', false);
+set('dotenv', '{{current_path}}/.env');
+set('dotenv_local', '{{local_path}}/.env');
 
 set('rsync', function () {
     $rsyncUseChmod = get('rsync_use_chmod');
