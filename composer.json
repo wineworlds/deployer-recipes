@@ -2,7 +2,7 @@
 	"name": "wineworlds/deployer-recipes",
 	"description": "A collection of recipes for deployer",
 	"type": "deployer-recipes",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"require": {
 		"deployer/deployer": "^v7.0"
 	},
