@@ -67,7 +67,9 @@ task('fetch:db:export', function () {
 
         // Export DB
         writeln("<info>Export DB...</info>");
-        run("mysqldump -h {$host} -P {$port} -u {$user} -p{$pass} {$options} {$name} > {{deploy_path}}/{$file}");
+        // TODO: die abschnitt mit dem sed sollte configuriert werden können.
+        // INFO: das mit dem sed löst ein bug mit mittwald
+        run("mysqldump -h {$host} -P {$port} -u {$user} -p{$pass} {$options} {$name} | sed -e 's/DEFINER[ ]*=[ ]*[^*]*\*/\*/' > {{deploy_path}}/{$file}");
 
         // Download DB
         writeln("<info>Download DB...</info>");
