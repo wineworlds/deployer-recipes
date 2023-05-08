@@ -75,19 +75,21 @@ add('shared_dirs', [
 set('fetch_dirs', [
     "config/jwt",
     "files",
+    "custom/plugins",
     "public/media",
     "public/thumbnail",
     "public/sitemap"
 ]);
 
 set('fetch_files', [
-    ".env",
+    // ".env",
     ".uniqueid.txt",
     "auth.json"
 ]);
 
 set('sync_dirs', [
     // "config/jwt",
+    "custom/plugins",
     "files",
     "public/media",
     "public/thumbnail",
