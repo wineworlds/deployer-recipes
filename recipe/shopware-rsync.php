@@ -66,6 +66,7 @@ set('shared_files', [
 add('shared_dirs', [
     "config/jwt",
     "files",
+    "custom/plugins",
     "var/log",
     "public/media",
     "public/thumbnail",

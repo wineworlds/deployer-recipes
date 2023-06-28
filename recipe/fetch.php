@@ -133,10 +133,13 @@ task('fetch:files', function () {
 
                 // Check if local dir does not exist.
                 if (!testLocally("[ -d $localPath/$dir ]")) {
+
                     // Create local dir if it does not exist.
+                    writeln("<info>Create local $dir/</info>");
                     runLocally("mkdir -p $localPath/$dir");
                 }
 
+                writeln("<info>Download $dir/</info>");
                 download("$currentPath/$dir/", "$localPath/$dir", [
                     'flags' => '-rDzLK',
                     'options' => [
@@ -150,6 +153,8 @@ task('fetch:files', function () {
         foreach (get('fetch_files') as $file) {
             // Check if file does exist.
             if (test("[ -f $currentPath/$file ]")) {
+
+                writeln("<info>Download $file</info>");
                 download("$currentPath/$file", "$localPath/$file", [
                     'flags' => '-rDzLK',
                 ]);
@@ -157,6 +162,7 @@ task('fetch:files', function () {
         }
     } else {
         download("$currentPath/", "$localPath", [
+            'flags' => '-rDzLK',
             'options' => [
                 '--exclude=_processed_',
                 '--exclude=_temp_',
