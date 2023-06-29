@@ -66,7 +66,7 @@ task('fetch:db:export', function () {
         $name = $matches[5];
 
         // Export DB
-        writeln("<info>Export DB...</info>");
+        writeln("<info>Export from '$name'...</info>");
         // TODO: die abschnitt mit dem sed sollte configuriert werden können.
         // INFO: das mit dem sed löst ein bug mit mittwald
         run("mysqldump -h {$host} -P {$port} -u {$user} -p{$pass} {$options} {$name} | sed -e 's/DEFINER[ ]*=[ ]*[^*]*\*/\*/' > {{deploy_path}}/{$file}");
@@ -102,7 +102,7 @@ task('fetch:db:import', function () {
         $name = $matches[5];
 
         // Import DB
-        writeln("<info>Import DB...</info>");
+        writeln("<info>Import to '$name'...</info>");
         runLocally("mysql -h {$host} -P {$port} -u {$user} -p{$pass} -D {$name} < {{local_path}}/{$file}");
 
         // Remove DB file from local

@@ -40,7 +40,7 @@ task('sync:db:export', function () {
         $name = $matches[5];
 
         // Export DB
-        writeln("<info>Export DB...</info>");
+        writeln("<info>Export from '$name'...</info>");
         run("mysqldump -h {$host} -P {$port} -u {$user} -p{$pass} {$options} {$name} > {{deploy_path}}/{$file}");
 
         // Download DB
@@ -74,7 +74,7 @@ task('sync:db:import', function () {
         upload("{{local_path}}/{$file}", "{{deploy_path}}/{$file}");
 
         // Import DB
-        writeln("<info>Import DB...</info>");
+        writeln("<info>Import to '$name'...</info>");
         run("mysql -h {$host} -P {$port} -u {$user} -p{$pass} -D {$name} < {{deploy_path}}/{$file}");
 
         // Remove DB file from server
