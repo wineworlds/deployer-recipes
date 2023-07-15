@@ -21,6 +21,7 @@ set('rsync', function () {
             '/.*',
             '/composer.*',
             '/deploy.yaml',
+            '/config/system/additional.php',
             '/{{typo3_webroot}}/fileadmin',
             '/{{typo3_webroot}}/typo3temp',
             '/{{typo3_webroot}}/uploads',
@@ -53,7 +54,8 @@ set('rsync_src', './');
 
 set('shared_files', [
     '.env',
-    '{{typo3_webroot}}/typo3conf/AdditionalConfiguration.php'
+    '/config/system/additional.php',
+    '{{typo3_webroot}}/typo3conf/AdditionalConfiguration.php',
 ]);
 
 add('shared_dirs', [
