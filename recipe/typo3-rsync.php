@@ -13,6 +13,8 @@ set('typo3_webroot', 'public');
 set('rsync_chmod', 'u+rw,g+r,o+r');
 set('rsync_use_chmod', false);
 
+set('t3_bin', 'bin/typo3cms');
+
 set('rsync', function () {
     $rsyncUseChmod = get('rsync_use_chmod');
 
@@ -97,10 +99,10 @@ task('deploy', [
 
 desc('Deploys your TYPO3 project and fetches the database');
 task('t3:prepare', static function () {
-    run('cd {{release_path}} && bin/typo3cms database:updateschema');
-    run('cd {{release_path}} && bin/typo3cms install:fixfolderstructure');
-    run('cd {{release_path}} && bin/typo3cms cache:flush');
-    run('cd {{release_path}} && bin/typo3cms cache:warmup');
+    run('cd {{release_path}} && {{t3_bin}} database:updateschema');
+    run('cd {{release_path}} && {{t3_bin}} install:fixfolderstructure');
+    run('cd {{release_path}} && {{t3_bin}} cache:flush');
+    run('cd {{release_path}} && {{t3_bin}} cache:warmup');
 });
 
 // ToDo: sync:db:export & sync:db:import fehlen noch, diese müssen auch noch an TYPO3 angepasst werden.
@@ -109,7 +111,7 @@ task('fetch:db:export', function () {
     // TODO: der bin Pfad sollte konfigurierbar sein
     // TODO: gibt es eine bessere lösung anstatt cd im run aufzurufen?
 
-    run("cd {{current_path}} && bin/typo3cms database:export -e '*cache*' -e 'sys_log' -e 'fe_sessions' -e 'be_sessions' > ./dump.sql");
+    run("cd {{current_path}} && {{t3_bin}} database:export -e '*cache*' -e 'sys_log' -e 'fe_sessions' -e 'be_sessions' > ./dump.sql");
 
     download("{{current_path}}/dump.sql", "{{local_path}}/dump.sql");
 
@@ -117,7 +119,7 @@ task('fetch:db:export', function () {
 });
 
 task('fetch:db:import', function () {
-    runLocally("cd {{local_path}} && cat ./dump.sql | bin/typo3cms database:import");
+    runLocally("cd {{local_path}} && cat ./dump.sql | {{t3_bin}} database:import");
 
     runLocally("rm {{local_path}}/dump.sql");
 });
