@@ -68,7 +68,6 @@ add('shared_dirs', [
 ]);
 
 set('fetch_dirs', [
-    'config',
     '{{typo3_webroot}}/fileadmin',
     '{{typo3_webroot}}/typo3temp',
     '{{typo3_webroot}}/uploads'
