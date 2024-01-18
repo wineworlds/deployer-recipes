@@ -2,9 +2,9 @@
 	"name": "wineworlds/deployer-recipes",
 	"description": "A collection of recipes for deployer",
 	"type": "deployer-recipes",
-	"version": "1.1.4",
+	"version": "1.2.0",
 	"require": {
-		"deployer/deployer": "^v7.0"
+		"deployer/deployer": "^v7.3"
 	},
 	"license": "MIT",
 	"authors": [
