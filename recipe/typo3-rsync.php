@@ -61,6 +61,7 @@ set('shared_files', [
 ]);
 
 add('shared_dirs', [
+    'config/sites',
     'var/charset',
     'var/lock',
     'var/log',
@@ -68,6 +69,7 @@ add('shared_dirs', [
 ]);
 
 set('fetch_dirs', [
+    'config/sites',
     '{{typo3_webroot}}/fileadmin',
     '{{typo3_webroot}}/typo3temp',
     '{{typo3_webroot}}/uploads'
